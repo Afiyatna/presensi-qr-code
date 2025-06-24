@@ -1,5 +1,5 @@
 // Konfigurasi Google Apps Script untuk admin
-const ADMIN_GOOGLE_APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzj2gctKXDm7MotPwvZM2a1sbFCYDeBkTCYegdF7arqBciUdLZkfltpkwFK7_klTsQE/exec'; // Ganti dengan URL Google Apps Script Anda
+const ADMIN_GOOGLE_APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzXKJxef4smlI2MAKelsQRwwGuYMiyGRmmWkUI9t7f9NvUUINOxh3bX-8NaebVnGVTw/exec'; // Ganti dengan URL Google Apps Script Anda
 
 // Variabel global
 let allPresensiData = [];

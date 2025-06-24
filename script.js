@@ -1,5 +1,5 @@
 // Konfigurasi Google Apps Script
-const GOOGLE_APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzj2gctKXDm7MotPwvZM2a1sbFCYDeBkTCYegdF7arqBciUdLZkfltpkwFK7_klTsQE/exec'; // Ganti dengan URL Google Apps Script Anda
+const GOOGLE_APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzXKJxef4smlI2MAKelsQRwwGuYMiyGRmmWkUI9t7f9NvUUINOxh3bX-8NaebVnGVTw/exec'; // Ganti dengan URL Google Apps Script Anda
 
 // Variabel global
 let html5QrcodeScanner;
@@ -138,29 +138,23 @@ async function handleFormSubmit(e) {
 
 // Fungsi untuk mengirim data ke Google Apps Script
 async function sendPresensiData(data) {
-    if (!GOOGLE_APPS_SCRIPT_URL || GOOGLE_APPS_SCRIPT_URL === 'YOUR_GOOGLE_APPS_SCRIPT_URL_HERE') {
-        // Simulasi response untuk testing
-        await new Promise(resolve => setTimeout(resolve, 1000));
-        return {
-            success: true,
-            message: 'Data berhasil dikirim (simulasi)',
-            data: data
-        };
-    }
-    
+    const formBody = Object.keys(data)
+        .map(key => encodeURIComponent(key) + '=' + encodeURIComponent(data[key]))
+        .join('&');
+
     try {
         const response = await fetch(GOOGLE_APPS_SCRIPT_URL, {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json',
+                'Content-Type': 'application/x-www-form-urlencoded',
             },
-            body: JSON.stringify(data)
+            body: formBody
         });
-        
+
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
-        
+
         const result = await response.json();
         return result;
     } catch (error) {
