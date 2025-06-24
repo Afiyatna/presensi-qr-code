@@ -5,7 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>QR Code Generator - Presensi Online</title>
     <link rel="stylesheet" href="styles.css">
-    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
+    <!-- Pakai qrcodejs dari cdnjs agar kompatibel di GitHub Pages -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 </head>
 <body>
     <div class="container">
@@ -74,7 +75,6 @@
     </div>
 
     <script>
-        // DOM Elements
         const qrText = document.getElementById('qrText');
         const qrSize = document.getElementById('qrSize');
         const btnGenerate = document.getElementById('btnGenerate');
@@ -82,12 +82,10 @@
         const qrCode = document.getElementById('qrCode');
         const templateItems = document.querySelectorAll('.template-item');
 
-        // Event Listeners
         document.addEventListener('DOMContentLoaded', function() {
             btnGenerate.addEventListener('click', generateQRCode);
             btnDownload.addEventListener('click', downloadQRCode);
-            
-            // Template click events
+
             templateItems.forEach(item => {
                 item.addEventListener('click', function() {
                     const text = this.getAttribute('data-text');
@@ -95,53 +93,41 @@
                     generateQRCode();
                 });
             });
-            
-            // Generate QR Code on page load
+
             generateQRCode();
         });
 
-        // Generate QR Code
         function generateQRCode() {
             const text = qrText.value.trim();
             const size = parseInt(qrSize.value);
-            
+
             if (!text) {
                 alert('Masukkan teks untuk QR Code');
                 return;
             }
-            
-            // Clear previous QR Code
+
             qrCode.innerHTML = '';
-            
-            // Generate new QR Code
-            QRCode.toCanvas(qrCode, text, {
+            // Gunakan qrcodejs (new QRCode)
+            new QRCode(qrCode, {
+                text: text,
                 width: size,
-                margin: 2,
-                color: {
-                    dark: '#000000',
-                    light: '#FFFFFF'
-                }
-            }, function(error) {
-                if (error) {
-                    console.error('Error generating QR Code:', error);
-                    alert('Gagal generate QR Code');
-                } else {
-                    btnDownload.style.display = 'block';
-                }
+                height: size,
+                colorDark: "#000000",
+                colorLight: "#ffffff",
+                correctLevel: QRCode.CorrectLevel.H
             });
+            btnDownload.style.display = 'block';
         }
 
-        // Download QR Code
         function downloadQRCode() {
-            const canvas = qrCode.querySelector('canvas');
-            if (!canvas) {
+            const img = qrCode.querySelector('img');
+            if (!img) {
                 alert('Generate QR Code terlebih dahulu');
                 return;
             }
-            
             const link = document.createElement('a');
             link.download = `qr-code-${qrText.value.replace(/[^a-zA-Z0-9]/g, '_')}.png`;
-            link.href = canvas.toDataURL();
+            link.href = img.src;
             link.click();
         }
 
@@ -155,32 +141,27 @@
                 box-shadow: 0 10px 30px rgba(0,0,0,0.2);
                 margin-bottom: 30px;
             }
-            
             .qr-result {
                 margin-top: 20px;
                 text-align: center;
             }
-            
-            .qr-result canvas {
+            .qr-result img {
                 border: 1px solid #e2e8f0;
                 border-radius: 8px;
                 margin-bottom: 15px;
             }
-            
             .qr-templates {
                 background: white;
                 padding: 30px;
                 border-radius: 15px;
                 box-shadow: 0 10px 30px rgba(0,0,0,0.2);
             }
-            
             .template-grid {
                 display: grid;
                 grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
                 gap: 20px;
                 margin-top: 20px;
             }
-            
             .template-item {
                 background: #f7fafc;
                 padding: 20px;
@@ -190,31 +171,26 @@
                 transition: all 0.3s ease;
                 text-align: center;
             }
-            
             .template-item:hover {
                 background: #edf2f7;
                 border-color: #667eea;
                 transform: translateY(-2px);
             }
-            
             .template-item h3 {
                 color: #4a5568;
                 margin-bottom: 8px;
                 font-size: 1.1rem;
             }
-            
             .template-item p {
                 color: #718096;
                 font-size: 0.9rem;
                 margin: 0;
             }
-            
             @media (max-width: 768px) {
                 .template-grid {
                     grid-template-columns: repeat(2, 1fr);
                 }
             }
-            
             @media (max-width: 480px) {
                 .template-grid {
                     grid-template-columns: 1fr;
