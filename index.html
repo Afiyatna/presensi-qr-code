@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Presensi Online - Scan QR Code</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📱 Presensi Online</h1>
+            <p>Scan QR Code untuk mencatat kehadiran</p>
+        </header>
+
+        <main>
+            <!-- Form Presensi -->
+            <div class="presensi-form" id="presensiForm">
+                <h2>Form Presensi</h2>
+                <form id="formPresensi">
+                    <div class="form-group">
+                        <label for="nama">Nama Lengkap:</label>
+                        <input type="text" id="nama" name="nama" required placeholder="Masukkan nama lengkap">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="kelompok">Kelompok:</label>
+                        <select id="kelompok" name="kelompok" required>
+                            <option value="">Pilih kelompok</option>
+                            <option value="Muda-mudi A">Muda-mudi A</option>
+                            <option value="Muda-mudi B">Muda-mudi B</option>
+                            <option value="Muda-mudi C">Muda-mudi C</option>
+                            <option value="Muda-mudi D">Muda-mudi D</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="qrData">Data QR Code:</label>
+                        <input type="text" id="qrData" name="qrData" readonly placeholder="Scan QR Code terlebih dahulu">
+                    </div>
+
+                    <button type="submit" id="btnSubmit" disabled>Kirim Presensi</button>
+                </form>
+            </div>
+
+            <!-- QR Scanner -->
+            <div class="qr-scanner" id="qrScanner">
+                <h2>Scanner QR Code</h2>
+                <div id="reader"></div>
+                <button id="btnStartScan" class="btn-primary">Mulai Scan</button>
+                <button id="btnStopScan" class="btn-secondary" style="display: none;">Stop Scan</button>
+            </div>
+
+            <!-- Status dan Notifikasi -->
+            <div class="status-section">
+                <div id="statusMessage" class="status-message"></div>
+                <div id="loadingSpinner" class="loading-spinner" style="display: none;"></div>
+            </div>
+
+            <!-- Link ke Dashboard Admin dan QR Generator -->
+            <div class="admin-link">
+                <a href="admin.html" class="btn-admin">📊 Dashboard Admin</a>
+                <a href="qr-generator.html" class="btn-admin" style="margin-left: 15px;">🔲 QR Generator</a>
+            </div>
+        </main>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html> 

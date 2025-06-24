@@ -1,0 +1,36 @@
+{
+  "name": "presensi-qr-code",
+  "version": "1.0.0",
+  "description": "Aplikasi presensi online berbasis web dengan fitur scan QR Code yang terintegrasi dengan Google Spreadsheet",
+  "main": "index.html",
+  "scripts": {
+    "start": "python -m http.server 8000",
+    "dev": "python -m http.server 8000",
+    "serve": "python -m http.server 8000"
+  },
+  "keywords": [
+    "presensi",
+    "qr-code",
+    "scanner",
+    "google-spreadsheet",
+    "google-apps-script",
+    "javascript",
+    "html5",
+    "css3"
+  ],
+  "author": "Presensi QR Code Team",
+  "license": "MIT",
+  "dependencies": {
+    "html5-qrcode": "^2.3.8",
+    "qrcode": "^1.5.3"
+  },
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yourusername/presensi-qr-code.git"
+  },
+  "bugs": {
+    "url": "https://github.com/yourusername/presensi-qr-code/issues"
+  },
+  "homepage": "https://github.com/yourusername/presensi-qr-code#readme"
+} 

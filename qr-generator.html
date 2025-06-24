@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QR Code Generator - Presensi Online</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🔲 QR Code Generator</h1>
+            <p>Buat QR Code untuk presensi</p>
+            <a href="index.html" class="btn-back">← Kembali ke Presensi</a>
+        </header>
+
+        <main>
+            <div class="qr-generator">
+                <h2>Generator QR Code</h2>
+                
+                <div class="form-group">
+                    <label for="qrText">Teks QR Code:</label>
+                    <input type="text" id="qrText" placeholder="Masukkan teks untuk QR Code" value="PRESENSI_ACARA_2024">
+                </div>
+                
+                <div class="form-group">
+                    <label for="qrSize">Ukuran QR Code:</label>
+                    <select id="qrSize">
+                        <option value="128">128x128 (Kecil)</option>
+                        <option value="256" selected>256x256 (Sedang)</option>
+                        <option value="512">512x512 (Besar)</option>
+                    </select>
+                </div>
+                
+                <button id="btnGenerate" class="btn-primary">Generate QR Code</button>
+                
+                <div class="qr-result" id="qrResult">
+                    <div id="qrCode"></div>
+                    <button id="btnDownload" class="btn-secondary" style="display: none;">Download QR Code</button>
+                </div>
+            </div>
+
+            <div class="qr-templates">
+                <h2>Template QR Code</h2>
+                <div class="template-grid">
+                    <div class="template-item" data-text="PRESENSI_ACARA_2024">
+                        <h3>Acara 2024</h3>
+                        <p>QR Code untuk acara tahun 2024</p>
+                    </div>
+                    <div class="template-item" data-text="PRESENSI_KELOMPOK_A">
+                        <h3>Kelompok A</h3>
+                        <p>QR Code khusus kelompok A</p>
+                    </div>
+                    <div class="template-item" data-text="PRESENSI_KELOMPOK_B">
+                        <h3>Kelompok B</h3>
+                        <p>QR Code khusus kelompok B</p>
+                    </div>
+                    <div class="template-item" data-text="PRESENSI_KELOMPOK_C">
+                        <h3>Kelompok C</h3>
+                        <p>QR Code khusus kelompok C</p>
+                    </div>
+                    <div class="template-item" data-text="PRESENSI_KELOMPOK_D">
+                        <h3>Kelompok D</h3>
+                        <p>QR Code khusus kelompok D</p>
+                    </div>
+                    <div class="template-item" data-text="PRESENSI_TEST">
+                        <h3>Test QR Code</h3>
+                        <p>QR Code untuk testing</p>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // DOM Elements
+        const qrText = document.getElementById('qrText');
+        const qrSize = document.getElementById('qrSize');
+        const btnGenerate = document.getElementById('btnGenerate');
+        const btnDownload = document.getElementById('btnDownload');
+        const qrCode = document.getElementById('qrCode');
+        const templateItems = document.querySelectorAll('.template-item');
+
+        // Event Listeners
+        document.addEventListener('DOMContentLoaded', function() {
+            btnGenerate.addEventListener('click', generateQRCode);
+            btnDownload.addEventListener('click', downloadQRCode);
+            
+            // Template click events
+            templateItems.forEach(item => {
+                item.addEventListener('click', function() {
+                    const text = this.getAttribute('data-text');
+                    qrText.value = text;
+                    generateQRCode();
+                });
+            });
+            
+            // Generate QR Code on page load
+            generateQRCode();
+        });
+
+        // Generate QR Code
+        function generateQRCode() {
+            const text = qrText.value.trim();
+            const size = parseInt(qrSize.value);
+            
+            if (!text) {
+                alert('Masukkan teks untuk QR Code');
+                return;
+            }
+            
+            // Clear previous QR Code
+            qrCode.innerHTML = '';
+            
+            // Generate new QR Code
+            QRCode.toCanvas(qrCode, text, {
+                width: size,
+                margin: 2,
+                color: {
+                    dark: '#000000',
+                    light: '#FFFFFF'
+                }
+            }, function(error) {
+                if (error) {
+                    console.error('Error generating QR Code:', error);
+                    alert('Gagal generate QR Code');
+                } else {
+                    btnDownload.style.display = 'block';
+                }
+            });
+        }
+
+        // Download QR Code
+        function downloadQRCode() {
+            const canvas = qrCode.querySelector('canvas');
+            if (!canvas) {
+                alert('Generate QR Code terlebih dahulu');
+                return;
+            }
+            
+            const link = document.createElement('a');
+            link.download = `qr-code-${qrText.value.replace(/[^a-zA-Z0-9]/g, '_')}.png`;
+            link.href = canvas.toDataURL();
+            link.click();
+        }
+
+        // Add some custom styles for this page
+        const style = document.createElement('style');
+        style.textContent = `
+            .qr-generator {
+                background: white;
+                padding: 30px;
+                border-radius: 15px;
+                box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+                margin-bottom: 30px;
+            }
+            
+            .qr-result {
+                margin-top: 20px;
+                text-align: center;
+            }
+            
+            .qr-result canvas {
+                border: 1px solid #e2e8f0;
+                border-radius: 8px;
+                margin-bottom: 15px;
+            }
+            
+            .qr-templates {
+                background: white;
+                padding: 30px;
+                border-radius: 15px;
+                box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            }
+            
+            .template-grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+                gap: 20px;
+                margin-top: 20px;
+            }
+            
+            .template-item {
+                background: #f7fafc;
+                padding: 20px;
+                border-radius: 10px;
+                border: 2px solid #e2e8f0;
+                cursor: pointer;
+                transition: all 0.3s ease;
+                text-align: center;
+            }
+            
+            .template-item:hover {
+                background: #edf2f7;
+                border-color: #667eea;
+                transform: translateY(-2px);
+            }
+            
+            .template-item h3 {
+                color: #4a5568;
+                margin-bottom: 8px;
+                font-size: 1.1rem;
+            }
+            
+            .template-item p {
+                color: #718096;
+                font-size: 0.9rem;
+                margin: 0;
+            }
+            
+            @media (max-width: 768px) {
+                .template-grid {
+                    grid-template-columns: repeat(2, 1fr);
+                }
+            }
+            
+            @media (max-width: 480px) {
+                .template-grid {
+                    grid-template-columns: 1fr;
+                }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html> 

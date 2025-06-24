@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Admin - Presensi Online</title>
+    <link rel="stylesheet" href="admin-styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📊 Dashboard Admin</h1>
+            <p>Data Presensi Muda-mudi</p>
+            <a href="index.html" class="btn-back">← Kembali ke Presensi</a>
+        </header>
+
+        <main>
+            <!-- Filter dan Kontrol -->
+            <div class="controls">
+                <div class="filter-group">
+                    <label for="filterKelompok">Filter Kelompok:</label>
+                    <select id="filterKelompok">
+                        <option value="">Semua Kelompok</option>
+                        <option value="Muda-mudi A">Muda-mudi A</option>
+                        <option value="Muda-mudi B">Muda-mudi B</option>
+                        <option value="Muda-mudi C">Muda-mudi C</option>
+                        <option value="Muda-mudi D">Muda-mudi D</option>
+                    </select>
+                </div>
+                
+                <div class="filter-group">
+                    <label for="filterDate">Filter Tanggal:</label>
+                    <input type="date" id="filterDate">
+                </div>
+                
+                <button id="btnRefresh" class="btn-primary">🔄 Refresh Data</button>
+                <button id="btnExport" class="btn-secondary">📥 Export Excel</button>
+            </div>
+
+            <!-- Statistik -->
+            <div class="stats">
+                <div class="stat-card">
+                    <h3>Total Presensi</h3>
+                    <div class="stat-number" id="totalPresensi">0</div>
+                </div>
+                <div class="stat-card">
+                    <h3>Hari Ini</h3>
+                    <div class="stat-number" id="presensiHariIni">0</div>
+                </div>
+                <div class="stat-card">
+                    <h3>Kelompok Terbanyak</h3>
+                    <div class="stat-number" id="kelompokTerbanyak">-</div>
+                </div>
+                <div class="stat-card">
+                    <h3>Terakhir Update</h3>
+                    <div class="stat-number" id="lastUpdate">-</div>
+                </div>
+            </div>
+
+            <!-- Tabel Data -->
+            <div class="data-section">
+                <h2>Data Presensi</h2>
+                <div class="table-container">
+                    <table id="presensiTable">
+                        <thead>
+                            <tr>
+                                <th>No</th>
+                                <th>Tanggal & Waktu</th>
+                                <th>Nama</th>
+                                <th>Kelompok</th>
+                                <th>QR Code</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tableBody">
+                            <!-- Data akan diisi oleh JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div class="pagination">
+                    <button id="btnPrev" class="btn-page">← Sebelumnya</button>
+                    <span id="pageInfo">Halaman 1 dari 1</span>
+                    <button id="btnNext" class="btn-page">Selanjutnya →</button>
+                </div>
+            </div>
+
+            <!-- Loading dan Status -->
+            <div class="status-section">
+                <div id="statusMessage" class="status-message"></div>
+                <div id="loadingSpinner" class="loading-spinner" style="display: none;"></div>
+            </div>
+        </main>
+    </div>
+
+    <script src="admin-script.js"></script>
+</body>
+</html> 
