@@ -1,5 +1,5 @@
-// Konfigurasi Google Apps Script
-const GOOGLE_APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzXKJxef4smlI2MAKelsQRwwGuYMiyGRmmWkUI9t7f9NvUUINOxh3bX-8NaebVnGVTw/exec'; // Ganti dengan URL Google Apps Script Anda
+// Konfigurasi sheet.best
+const SHEET_BEST_URL = 'https://api.sheetbest.com/sheets/b743b6c4-c59f-4371-ae5a-e99cdd678911/tabs/Sheet1';
 
 // Variabel global
 let html5QrcodeScanner;
@@ -136,19 +136,21 @@ async function handleFormSubmit(e) {
     }
 }
 
-// Fungsi untuk mengirim data ke Google Apps Script
+// Fungsi untuk mengirim data ke sheet.best
 async function sendPresensiData(data) {
-    const formBody = Object.keys(data)
-        .map(key => encodeURIComponent(key) + '=' + encodeURIComponent(data[key]))
-        .join('&');
-
     try {
-        const response = await fetch(GOOGLE_APPS_SCRIPT_URL, {
+        const response = await fetch(SHEET_BEST_URL, {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/x-www-form-urlencoded',
+                'Content-Type': 'application/json',
             },
-            body: formBody
+            body: JSON.stringify({
+                nama: data.nama,
+                kelompok: data.kelompok,
+                qrData: data.qrData,
+                timestamp: data.timestamp,
+                userAgent: data.userAgent
+            })
         });
 
         if (!response.ok) {
@@ -156,9 +158,13 @@ async function sendPresensiData(data) {
         }
 
         const result = await response.json();
-        return result;
+        return {
+            success: true,
+            message: 'Data berhasil dikirim ke sheet.best',
+            data: result
+        };
     } catch (error) {
-        throw new Error('Gagal mengirim data ke server: ' + error.message);
+        throw new Error('Gagal mengirim data ke sheet.best: ' + error.message);
     }
 }
 

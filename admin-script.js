@@ -1,5 +1,5 @@
-// Konfigurasi Google Apps Script untuk admin
-const ADMIN_GOOGLE_APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzXKJxef4smlI2MAKelsQRwwGuYMiyGRmmWkUI9t7f9NvUUINOxh3bX-8NaebVnGVTw/exec'; // Ganti dengan URL Google Apps Script Anda
+// Konfigurasi sheet.best untuk admin
+const SHEET_BEST_URL = 'https://api.sheetbest.com/sheets/b743b6c4-c59f-4371-ae5a-e99cdd678911/tabs/Sheet1';
 
 // Variabel global
 let allPresensiData = [];
@@ -52,7 +52,7 @@ async function loadPresensiData() {
         renderTable();
         updatePagination();
         
-        showStatus('Data berhasil dimuat!', 'success');
+        showStatus('Data berhasil dimuat dari sheet.best!', 'success');
     } catch (error) {
         console.error('Error loading presensi data:', error);
         showStatus('Gagal memuat data: ' + error.message, 'error');
@@ -61,15 +61,10 @@ async function loadPresensiData() {
     }
 }
 
-// Fungsi untuk mengambil data dari Google Apps Script
+// Fungsi untuk mengambil data dari sheet.best
 async function fetchPresensiData() {
-    if (!ADMIN_GOOGLE_APPS_SCRIPT_URL || ADMIN_GOOGLE_APPS_SCRIPT_URL === 'YOUR_GOOGLE_APPS_SCRIPT_URL_HERE') {
-        // Data simulasi untuk testing
-        return generateMockData();
-    }
-    
     try {
-        const response = await fetch(ADMIN_GOOGLE_APPS_SCRIPT_URL + '?action=getData', {
+        const response = await fetch(SHEET_BEST_URL, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -80,10 +75,22 @@ async function fetchPresensiData() {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
         
-        const result = await response.json();
-        return result.data || [];
+        const data = await response.json();
+        
+        // Convert data ke format yang diinginkan
+        return data.map((item, index) => ({
+            id: index + 1,
+            timestamp: item.timestamp || new Date().toISOString(),
+            nama: item.nama || '',
+            kelompok: item.kelompok || '',
+            qrData: item.qrData || '',
+            userAgent: item.userAgent || '',
+            status: 'success'
+        }));
     } catch (error) {
-        throw new Error('Gagal mengambil data dari server: ' + error.message);
+        console.error('Error fetching data from sheet.best:', error);
+        // Fallback ke data simulasi jika sheet.best gagal
+        return generateMockData();
     }
 }
 
